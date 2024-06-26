@@ -9,15 +9,15 @@ import org.bukkit.entity.Entity;
 public interface CustomBehavior {
 
     /**
-     * Called every tick that the behavior is active.
-     * @param entity Entity that runs the behavior.
-     */
-    void tick(Entity entity);
-
-    /**
      * Called when the behavior is applied.
      * @param entity Entity that runs the behavior.
      */
     default void start(Entity entity) {}
+
+    /**
+     * Called every tick that the behavior is active.
+     * @param entity Entity that runs the behavior.
+     */
+    void tick(Entity entity);
 
 }

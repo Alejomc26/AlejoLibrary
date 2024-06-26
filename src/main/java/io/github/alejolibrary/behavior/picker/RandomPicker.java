@@ -6,12 +6,12 @@ import org.bukkit.entity.Entity;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.function.Supplier;
+import java.util.Random;
 
 public class RandomPicker implements BehaviorPicker {
 
-    private final List<Supplier<CustomBehavior>> behaviors = new ArrayList<>();
-    private final java.util.Random random = new java.util.Random();
+    private final List<CustomBehavior> behaviorList = new ArrayList<>();
+    private final Random random = new Random();
     private final BehaviorManager manager;
 
     public RandomPicker(BehaviorManager manager) {
@@ -19,20 +19,19 @@ public class RandomPicker implements BehaviorPicker {
     }
 
     @Override
-    public void add(Supplier<CustomBehavior> behaviorSupplier, int timesToRepeat) {
+    public void add(CustomBehavior behavior, int timesToRepeat) {
         for (int i = 0; i < timesToRepeat; i++) {
-            behaviors.add(behaviorSupplier);
+            behaviorList.add(behavior);
         }
     }
 
+
+
     @Override
     public void pick(Entity entity) {
-        if (!behaviors.isEmpty()) {
-            int randomIndex = random.nextInt(0,this.behaviors.size());
-            CustomBehavior behavior = behaviors.get(randomIndex).get();
-            if (behavior == null) {
-                return;
-            }
+        if (!behaviorList.isEmpty()) {
+            int randomIndex = random.nextInt(0, behaviorList.size());
+            CustomBehavior behavior = behaviorList.get(randomIndex);
             manager.setBehavior(entity, behavior);
         }
     }
@@ -44,6 +43,7 @@ public class RandomPicker implements BehaviorPicker {
 
     @Override
     public void clear() {
-        behaviors.clear();
+        behaviorList.clear();
     }
+
 }

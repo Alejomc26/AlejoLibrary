@@ -1,14 +1,9 @@
 package io.github.alejolibrary.utils;
 
-import io.github.alejolibrary.behavior.BehaviorRegistry;
-import io.github.alejolibrary.behavior.CustomBehavior;
 import org.bukkit.Location;
 import org.bukkit.World;
 import org.bukkit.block.Block;
-import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
-import org.bukkit.plugin.java.JavaPlugin;
-import org.bukkit.util.BoundingBox;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -19,7 +14,9 @@ import java.util.Random;
 
 public class BossUtils {
 
-    private BossUtils() {}
+    private BossUtils() {
+        System.out.println("ga");
+    }
 
     @Nullable
     public static Player getNearestPlayer(@Nullable Location location) {
@@ -34,7 +31,6 @@ public class BossUtils {
         if (location == null) {
             return null;
         }
-        BehaviorRegistry.register(() -> (Entity::remove), JavaPlugin.getProvidingPlugin(BossUtils.class));
         return getNearestPlayer(location.getNearbyPlayers(radius), location);
     }
 

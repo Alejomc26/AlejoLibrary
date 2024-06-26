@@ -6,11 +6,10 @@ import org.bukkit.entity.Entity;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.function.Supplier;
 
 public class SequentialPicker implements BehaviorPicker {
 
-    private final List<Supplier<CustomBehavior>> behaviors = new ArrayList<>();
+    private final List<CustomBehavior> behaviorList = new ArrayList<>();
     private final BehaviorManager manager;
     private int index;
 
@@ -19,21 +18,21 @@ public class SequentialPicker implements BehaviorPicker {
     }
 
     @Override
-    public void add(Supplier<CustomBehavior> behaviorSupplier, int timesToRepeat) {
+    public void add(CustomBehavior behavior, int timesToRepeat) {
         for (int i = 0; i < timesToRepeat; i++) {
-            behaviors.add(behaviorSupplier);
+            behaviorList.add(behavior);
         }
     }
 
     @Override
     public void pick(Entity entity) {
-        int size = behaviors.size();
+        int size = behaviorList.size();
         index++;
         if (index >= size) {
             index = 0;
         }
-        if (!behaviors.isEmpty()) {
-            CustomBehavior behavior = behaviors.get(index).get();
+        if (!behaviorList.isEmpty()) {
+            CustomBehavior behavior = behaviorList.get(index);
             manager.setBehavior(entity, behavior);
         }
     }
@@ -45,7 +44,7 @@ public class SequentialPicker implements BehaviorPicker {
 
     @Override
     public void clear() {
-        behaviors.clear();
+        behaviorList.clear();
     }
 
 }

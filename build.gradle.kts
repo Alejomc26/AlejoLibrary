@@ -1,8 +1,8 @@
-import org.jreleaser.model.Active
+import com.vanniktech.maven.publish.SonatypeHost
 
 plugins {
+    id("com.vanniktech.maven.publish") version "0.28.0"
     id("java")
-    id("org.jreleaser") version "1.12.0"
 }
 
 description = "Library for minecraft plugin developers (Paper api only)"
@@ -14,27 +14,13 @@ repositories {
     maven("https://repo.papermc.io/repository/maven-public/")
 }
 
-dependencies {
-    compileOnly("io.papermc.paper:paper-api:1.20.6-R0.1-SNAPSHOT")
+mavenPublishing {
+    publishToMavenCentral(SonatypeHost.CENTRAL_PORTAL, automaticRelease = false)
+    signAllPublications()
 }
 
-jreleaser {
-    signing {
-        active.set(Active.ALWAYS)
-        armored = true
-    }
-    deploy {
-        maven {
-            mavenCentral {
-                create("mavenCentral") {
-                    active.set(Active.ALWAYS)
-                    url.set("https://central.sonatype.com/api/v1/publisher")
-                    stagingRepository("target/staging-deploy")
-
-                }
-            }
-        }
-    }
+dependencies {
+    compileOnly("io.papermc.paper:paper-api:1.20.6-R0.1-SNAPSHOT")
 }
 
 java {
