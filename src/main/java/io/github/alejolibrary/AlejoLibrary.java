@@ -2,6 +2,7 @@ package io.github.alejolibrary;
 
 import org.bukkit.NamespacedKey;
 import org.jetbrains.annotations.ApiStatus;
+import org.jetbrains.annotations.NotNull;
 
 public class AlejoLibrary {
 
@@ -13,7 +14,7 @@ public class AlejoLibrary {
      * @return Namespace with the passed key.
      */
     @ApiStatus.Internal
-    public static NamespacedKey createKey(String key) {
+    public static NamespacedKey createKey(@NotNull String key) {
         return new NamespacedKey(NAMESPACE, key);
     }
 

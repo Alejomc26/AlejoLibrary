@@ -3,6 +3,7 @@ package io.github.alejolibrary.behavior.picker;
 import io.github.alejolibrary.behavior.BehaviorManager;
 import io.github.alejolibrary.behavior.CustomBehavior;
 import org.bukkit.entity.Entity;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -18,14 +19,14 @@ public class SequentialPicker implements BehaviorPicker {
     }
 
     @Override
-    public void add(CustomBehavior behavior, int timesToRepeat) {
+    public void add(@NotNull CustomBehavior behavior, int timesToRepeat) {
         for (int i = 0; i < timesToRepeat; i++) {
             behaviorList.add(behavior);
         }
     }
 
     @Override
-    public void pick(Entity entity) {
+    public void pick(@NotNull Entity entity) {
         int size = behaviorList.size();
         index++;
         if (index >= size) {

@@ -2,9 +2,10 @@ package io.github.alejolibrary.entity;
 
 import org.bukkit.entity.Entity;
 import org.bukkit.plugin.Plugin;
+import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.function.Predicate;
 import java.util.function.Supplier;
@@ -14,14 +15,14 @@ import java.util.function.Supplier;
  */
 public class EntityOverrideRegistry {
 
-    private static final Map<Predicate<Entity>, Supplier<EntityOverride>> ENTITY_OVERRIDE_MAP = new HashMap<>();
+    private static final Map<Predicate<Entity>, Supplier<EntityOverride>> ENTITY_OVERRIDE_MAP = new LinkedHashMap<>();
 
     /**
      * Register an EntityOverride implementation to be called when an entity meets a predicate requirements.
      * @param predicate Check if the entity should have your override.
      * @param overrideSupplier Supplier to get your EntityOverride implementations.
      */
-    public static void register(Predicate<Entity> predicate, Supplier<EntityOverride> overrideSupplier) {
+    public static void register(@NotNull Predicate<Entity> predicate, @NotNull Supplier<EntityOverride> overrideSupplier) {
         ENTITY_OVERRIDE_MAP.put(predicate, overrideSupplier);
     }
 
@@ -29,7 +30,7 @@ public class EntityOverrideRegistry {
      * Register the listener for EntityOverride implementations to work correctly.
      * @param plugin Plugin that owns the EntityOverride implementations.
      */
-    public static void listener(Plugin plugin) {
+    public static void listener(@NotNull Plugin plugin) {
         plugin.getServer().getPluginManager().registerEvents(new EntityOverrideListener(), plugin);
     }
 
@@ -39,7 +40,7 @@ public class EntityOverrideRegistry {
      * @return EntityOverride that meets the requirements of the passes entity, or null if none was found.
      */
     @Nullable
-    public static EntityOverride getEntityOverride(Entity entity) {
+    public static EntityOverride getEntityOverride(@NotNull Entity entity) {
         for (Map.Entry<Predicate<Entity>, Supplier<EntityOverride>> entry : ENTITY_OVERRIDE_MAP.entrySet()) {
             if (entry.getKey().test(entity)) {
                 return entry.getValue().get();

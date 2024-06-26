@@ -19,7 +19,8 @@ public class ItemFunctionRegistry {
     /**
      * Register an ItemFunction implementation. Apply registered functions to items using
      * {@link ItemManager#setItemFunction(ItemStack, Class)}.
-     * @param function ItemFunction to register.
+     * @param function ItemFunction implementation instance whose methods will be called when a player interacts with
+     *                an item with the item function in hand.
      */
     public static void register(@NotNull ItemFunction function, @NotNull Plugin plugin) {
         String functionName = function.getClass().getSimpleName();

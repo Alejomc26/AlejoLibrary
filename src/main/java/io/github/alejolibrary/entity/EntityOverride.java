@@ -18,7 +18,6 @@ public interface EntityOverride {
 
     /**
      * Called when an entity that meets the predicate requirements is added to the world.
-     * @param event
      */
     void onAdd(EntityAddToWorldEvent event);
 

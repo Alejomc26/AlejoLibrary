@@ -7,6 +7,9 @@ import org.bukkit.event.player.PlayerInteractEvent;
  */
 public interface ItemFunction {
 
+    /**
+     * Called every time that a player interacts with an item with the function in hand.
+     */
     default void interaction(PlayerInteractEvent event) {}
 
 }
