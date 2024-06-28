@@ -1,6 +1,8 @@
 package io.github.alejolibrary.entity;
 
 import com.destroystokyo.paper.event.entity.EntityAddToWorldEvent;
+import org.bukkit.event.entity.EntityDeathEvent;
+import org.bukkit.event.entity.EntityEvent;
 import org.bukkit.event.entity.EntitySpawnEvent;
 
 import java.util.function.Predicate;
@@ -12,13 +14,23 @@ import java.util.function.Supplier;
 public interface EntityOverride {
 
     /**
-     * Called when an entity that meets the predicate requirements spawns.
+     * Called when the entity spawns.
      */
-    void onSpawn(EntitySpawnEvent event);
+    default void onSpawn(EntitySpawnEvent event) {}
 
     /**
-     * Called when an entity that meets the predicate requirements is added to the world.
+     * Called when the entity is added to the world.
      */
-    void onAdd(EntityAddToWorldEvent event);
+    default void onAdd(EntityAddToWorldEvent event) {}
+
+    /**
+     * Called when the entity dies.
+     */
+    default void onDeath(EntityDeathEvent event) {}
+
+    /**
+     * Called when the entity is spawned or added to the world
+     */
+    default void onLoad(EntityEvent event) {}
 
 }
