@@ -1,6 +1,7 @@
-package io.github.alejolibrary.entity;
+package io.github.alejolibrary.entity.entityoverride;
 
 import com.destroystokyo.paper.event.entity.EntityAddToWorldEvent;
+import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.event.entity.EntityDeathEvent;
 import org.bukkit.event.entity.EntityEvent;
 import org.bukkit.event.entity.EntitySpawnEvent;
@@ -27,6 +28,11 @@ public interface EntityOverride {
      * Called when the entity dies.
      */
     default void onDeath(EntityDeathEvent event) {}
+
+    /**
+     * Called when the entity is involved in EntityDamageEvent
+     */
+    default void onDamage(EntityDamageEvent event) {}
 
     /**
      * Called when the entity is spawned or added to the world

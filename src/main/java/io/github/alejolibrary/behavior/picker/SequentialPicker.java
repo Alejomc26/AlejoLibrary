@@ -7,10 +7,11 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.function.Supplier;
 
 public class SequentialPicker implements BehaviorPicker {
 
-    private final List<CustomBehavior> behaviorList = new ArrayList<>();
+    private final List<Supplier<CustomBehavior>> behaviorList = new ArrayList<>();
     private final BehaviorManager manager;
     private int index;
 
@@ -19,9 +20,9 @@ public class SequentialPicker implements BehaviorPicker {
     }
 
     @Override
-    public void add(@NotNull CustomBehavior behavior, int timesToRepeat) {
+    public void add(@NotNull Supplier<CustomBehavior> behaviorSupplier, int timesToRepeat) {
         for (int i = 0; i < timesToRepeat; i++) {
-            behaviorList.add(behavior);
+            behaviorList.add(behaviorSupplier);
         }
     }
 
@@ -33,7 +34,7 @@ public class SequentialPicker implements BehaviorPicker {
             index = 0;
         }
         if (!behaviorList.isEmpty()) {
-            CustomBehavior behavior = behaviorList.get(index);
+            CustomBehavior behavior = behaviorList.get(index).get();
             manager.setBehavior(entity, behavior);
         }
     }

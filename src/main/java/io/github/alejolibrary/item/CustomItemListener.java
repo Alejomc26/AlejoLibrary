@@ -13,6 +13,7 @@ public class CustomItemListener implements Listener {
         if (itemStack == null) {
             return;
         }
+
         CustomItem customItem = ItemRegistry.getCustomItem(itemStack);
         if (customItem != null) {
             customItem.onInteraction(event);

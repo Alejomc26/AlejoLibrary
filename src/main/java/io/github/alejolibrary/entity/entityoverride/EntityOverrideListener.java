@@ -1,9 +1,10 @@
-package io.github.alejolibrary.entity;
+package io.github.alejolibrary.entity.entityoverride;
 
 import com.destroystokyo.paper.event.entity.EntityAddToWorldEvent;
 import org.bukkit.entity.Entity;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
+import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.event.entity.EntityDeathEvent;
 import org.bukkit.event.entity.EntitySpawnEvent;
 
@@ -44,6 +45,16 @@ public class EntityOverrideListener implements Listener {
             activeOverridesMap.put(entity.getUniqueId(), entityOverride);
             entityOverride.onAdd(event);
             entityOverride.onLoad(event);
+        }
+    }
+
+    @EventHandler
+    public void onEntityDamage(EntityDamageEvent event) {
+        Entity entity = event.getEntity();
+        EntityOverride entityOverride = EntityOverrideRegistry.getEntityOverride(entity);
+        if (entityOverride != null) {
+            activeOverridesMap.put(entity.getUniqueId(), entityOverride);
+            entityOverride.onDamage(event);
         }
     }
 

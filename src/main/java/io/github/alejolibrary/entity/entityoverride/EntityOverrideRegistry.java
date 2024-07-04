@@ -1,4 +1,4 @@
-package io.github.alejolibrary.entity;
+package io.github.alejolibrary.entity.entityoverride;
 
 import org.bukkit.entity.Entity;
 import org.bukkit.plugin.Plugin;

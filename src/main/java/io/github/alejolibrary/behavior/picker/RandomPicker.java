@@ -8,10 +8,11 @@ import org.jetbrains.annotations.NotNull;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
+import java.util.function.Supplier;
 
 public class RandomPicker implements BehaviorPicker {
 
-    private final List<CustomBehavior> behaviorList = new ArrayList<>();
+    private final List<Supplier<CustomBehavior>> behaviorList = new ArrayList<>();
     private final Random random = new Random();
     private final BehaviorManager manager;
 
@@ -20,9 +21,9 @@ public class RandomPicker implements BehaviorPicker {
     }
 
     @Override
-    public void add(@NotNull CustomBehavior behavior, int timesToRepeat) {
+    public void add(@NotNull Supplier<CustomBehavior> behaviorSupplier, int timesToRepeat) {
         for (int i = 0; i < timesToRepeat; i++) {
-            behaviorList.add(behavior);
+            behaviorList.add(behaviorSupplier);
         }
     }
 
@@ -32,7 +33,7 @@ public class RandomPicker implements BehaviorPicker {
     public void pick(@NotNull Entity entity) {
         if (!behaviorList.isEmpty()) {
             int randomIndex = random.nextInt(0, behaviorList.size());
-            CustomBehavior behavior = behaviorList.get(randomIndex);
+            CustomBehavior behavior = behaviorList.get(randomIndex).get();
             manager.setBehavior(entity, behavior);
         }
     }
