@@ -20,7 +20,7 @@ public interface EntityOverride {
     default void onSpawn(EntitySpawnEvent event) {}
 
     /**
-     * Called when the entity is added to the world.
+     * Called 1 tick after the entity is added to the world (calling it instantly breaks teleport api).
      */
     default void onAdd(EntityAddToWorldEvent event) {}
 

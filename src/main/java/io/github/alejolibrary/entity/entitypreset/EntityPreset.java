@@ -11,8 +11,9 @@ public interface EntityPreset<T extends Entity> {
 
     /**
      * Called before the entity is spawned.
+     * @param location Spawn location.
      */
-    void onSpawn(T entity);
+    void onSpawn(T entity, Location location);
 
     /**
      * @return Class of the entity to spawn.
@@ -25,7 +26,7 @@ public interface EntityPreset<T extends Entity> {
      * @param entityPreset Preset that will be used.
      */
     static <P extends Entity> void spawn(Location location, EntityPreset<P> entityPreset) {
-        location.getWorld().spawn(location, entityPreset.getEntityClass(), entityPreset::onSpawn);
+        location.getWorld().spawn(location, entityPreset.getEntityClass(), entity -> entityPreset.onSpawn(entity, location));
     }
 
 }

@@ -31,7 +31,7 @@ public class EntityOverrideRegistry {
      * @param plugin Plugin that owns the EntityOverride implementations.
      */
     public static void listener(@NotNull Plugin plugin) {
-        plugin.getServer().getPluginManager().registerEvents(new EntityOverrideListener(), plugin);
+        plugin.getServer().getPluginManager().registerEvents(new EntityOverrideListener(plugin), plugin);
     }
 
     /**
