@@ -13,7 +13,7 @@ public class SequentialPicker implements BehaviorPicker {
 
     private final List<Supplier<CustomBehavior>> behaviorList = new ArrayList<>();
     private final BehaviorManager manager;
-    private int index;
+    private int index = 0;
 
     public SequentialPicker(BehaviorManager manager) {
         this.manager = manager;
@@ -29,13 +29,15 @@ public class SequentialPicker implements BehaviorPicker {
     @Override
     public void pick(@NotNull Entity entity) {
         int size = behaviorList.size();
-        index++;
-        if (index >= size) {
-            index = 0;
+        if (behaviorList.isEmpty()) {
+            return;
         }
-        if (!behaviorList.isEmpty()) {
+        if (index < size) {
             CustomBehavior behavior = behaviorList.get(index).get();
             manager.setBehavior(entity, behavior);
+            index++;
+        } else {
+            index = 0;
         }
     }
 

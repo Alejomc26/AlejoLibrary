@@ -5,25 +5,21 @@ import org.bukkit.plugin.Plugin;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-import java.util.LinkedHashMap;
-import java.util.Map;
-import java.util.function.Predicate;
-import java.util.function.Supplier;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Register your EntityOverride implementations
  */
 public class EntityOverrideRegistry {
 
-    private static final Map<Predicate<Entity>, Supplier<EntityOverride>> ENTITY_OVERRIDE_MAP = new LinkedHashMap<>();
+    private static final List<EntityOverride> OVERRIDE_LIST = new ArrayList<>();
 
     /**
-     * Register an EntityOverride implementation to be called when an entity meets a predicate requirements.
-     * @param predicate Check if the entity should have your override.
-     * @param overrideSupplier Supplier to get your EntityOverride implementations.
+     * Register an EntityOverride to be called when an entity is loaded.
      */
-    public static void register(@NotNull Predicate<Entity> predicate, @NotNull Supplier<EntityOverride> overrideSupplier) {
-        ENTITY_OVERRIDE_MAP.put(predicate, overrideSupplier);
+    public static void register(@NotNull EntityOverride entityOverride) {
+        OVERRIDE_LIST.add(entityOverride);
     }
 
     /**
@@ -41,9 +37,9 @@ public class EntityOverrideRegistry {
      */
     @Nullable
     public static EntityOverride getEntityOverride(@NotNull Entity entity) {
-        for (Map.Entry<Predicate<Entity>, Supplier<EntityOverride>> entry : ENTITY_OVERRIDE_MAP.entrySet()) {
-            if (entry.getKey().test(entity)) {
-                return entry.getValue().get();
+        for (EntityOverride entityOverride : OVERRIDE_LIST) {
+            if (entityOverride.testEntity(entity)) {
+                return entityOverride;
             }
         }
         return null;

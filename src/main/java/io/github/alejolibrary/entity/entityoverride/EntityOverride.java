@@ -1,6 +1,7 @@
 package io.github.alejolibrary.entity.entityoverride;
 
 import com.destroystokyo.paper.event.entity.EntityAddToWorldEvent;
+import org.bukkit.entity.Entity;
 import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.event.entity.EntityDeathEvent;
 import org.bukkit.event.entity.EntityEvent;
@@ -38,5 +39,12 @@ public interface EntityOverride {
      * Called when the entity is spawned or added to the world
      */
     default void onLoad(EntityEvent event) {}
+
+    /**
+     * Check if the entity should have your override.
+     * @param entity Entity that is going to be loaded.
+     * @return True to apply your override to the loaded entity, otherwise false.
+     */
+    boolean testEntity(Entity entity);
 
 }

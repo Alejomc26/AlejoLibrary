@@ -1,6 +1,5 @@
 package io.github.alejolibrary.utils;
 
-import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.World;
 import org.bukkit.block.Block;
@@ -8,7 +7,6 @@ import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 import org.bukkit.util.BoundingBox;
 import org.bukkit.util.NumberConversions;
-import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import java.util.Collection;
 
@@ -17,14 +15,14 @@ public class BossUtils {
     private BossUtils() {}
 
     @Nullable
-    public static Player getNearestPlayer(@NotNull Location location) {
-        return getNearestPlayer(location.getWorld().getPlayers(), location.x(), location.y(), location.z());
+    public static Player getNearestPlayer(Entity entity) {
+        return getNearestPlayer(entity.getWorld().getPlayers(), entity.getX(), entity.getY(), entity.getZ());
     }
 
     @Nullable
-    public static Player getNearestPlayer(Entity entity) {
-        return getNearestPlayer(entity.getWorld().getPlayers(), entity.getX(), entity.getY(), entity.getZ());
-
+    public static Player getNearestPlayer(Entity entity, double radius) {
+        Collection<Player> nearbyPlayers = entity.getWorld().getNearbyPlayers(entity.getLocation(), radius);
+        return getNearestPlayer(nearbyPlayers, entity.getX(), entity.getY(), entity.getZ());
     }
 
     @Nullable
@@ -46,6 +44,12 @@ public class BossUtils {
         }
 
         return nearestPlayer;
+    }
+
+    public static double distanceSquare(Entity entity1, Entity entity2) {
+        return NumberConversions.square(entity1.getX() - entity2.getX()) +
+                NumberConversions.square(entity1.getY() - entity2.getY()) +
+                NumberConversions.square(entity1.getZ() - entity2.getZ());
     }
 
     public static boolean isEntityInsideBlocks(Entity entity) {
