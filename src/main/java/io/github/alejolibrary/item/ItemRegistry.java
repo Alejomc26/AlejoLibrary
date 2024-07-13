@@ -53,6 +53,7 @@ public class ItemRegistry {
     public static ItemStack getItem(@NotNull Class<? extends CustomItem> customItemClass) {
         String itemClassName = customItemClass.getSimpleName();
         ItemWrapper wrapper = ITEM_MAP.get(itemClassName);
+
         if (wrapper != null) {
             return wrapper.itemStack();
         }
