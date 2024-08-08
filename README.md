@@ -26,6 +26,12 @@ dependencies {
 
 Shading
 ````gradle
+    plugins {
+        id("java")
+        id("io.github.goooler.shadow") version "8.1.7"
+    }
+````
+````gradle
 shadowJar {
     relocate 'io.github.alejolibrary', 'YOUR.PACKAGE.alejolibrary'
 }
