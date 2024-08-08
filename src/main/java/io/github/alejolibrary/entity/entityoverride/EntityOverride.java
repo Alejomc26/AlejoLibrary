@@ -1,17 +1,15 @@
 package io.github.alejolibrary.entity.entityoverride;
 
 import com.destroystokyo.paper.event.entity.EntityAddToWorldEvent;
+import com.destroystokyo.paper.event.entity.EntityRemoveFromWorldEvent;
 import org.bukkit.entity.Entity;
 import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.event.entity.EntityDeathEvent;
 import org.bukkit.event.entity.EntityEvent;
 import org.bukkit.event.entity.EntitySpawnEvent;
 
-import java.util.function.Predicate;
-import java.util.function.Supplier;
-
 /**
- * Interface to override a vanilla entity, register using {@link EntityOverrideRegistry#register(Predicate, Supplier)}.
+ * Interface to override a vanilla entity, register using {@link EntityOverrideRegistry#register(EntityOverride)}.
  */
 public interface EntityOverride {
 
@@ -39,6 +37,11 @@ public interface EntityOverride {
      * Called when the entity is spawned or added to the world
      */
     default void onLoad(EntityEvent event) {}
+
+    /**
+     * Called when the entity is removed from a world.
+     */
+    default void onRemove(EntityRemoveFromWorldEvent event) {}
 
     /**
      * Check if the entity should have your override.

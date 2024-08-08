@@ -1,60 +1,55 @@
 package io.github.alejolibrary.utils;
 
 import org.bukkit.Location;
-import org.bukkit.Material;
+import org.bukkit.Particle;
 import org.bukkit.World;
-import org.bukkit.block.Block;
 import org.bukkit.entity.Entity;
-import org.bukkit.entity.Golem;
-import org.bukkit.entity.IronGolem;
 import org.bukkit.entity.Player;
-import org.bukkit.util.BoundingBox;
 import org.bukkit.util.NumberConversions;
+import org.bukkit.util.Vector;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-import java.util.ArrayList;
+import java.lang.reflect.Array;
 import java.util.Collection;
 
 public class BossUtils {
 
-
-    public static <T extends Entity> T getNearestEntityByClass(Entity entity, double radius, Class<T> filter) {
-        Collection<Entity> nearbyEntities = entity.getNearbyEntities(radius, radius, radius);
-        return filterNearestEntityByClass(nearbyEntities, entity.getX(), entity.getY(), entity.getZ(), filter);
+    @Nullable
+    public static Player getNearestPlayer(Entity entity, double radius) {
+        Collection<Entity> nearbyPlayers = entity.getNearbyEntities(radius, radius, radius);
+        return (Player) filterNearestEntityByClass(nearbyPlayers, entity.getX(), entity.getY(), entity.getZ(), Player.class);
     }
 
-    public static <T extends Entity> T getNearestEntityByClass(World world, Location location, double radius, Class<T> filter) {
-        Collection<Entity> nearbyEntities = world.getNearbyEntities(location, radius, radius, radius);
-        return filterNearestEntityByClass(nearbyEntities, location.x(), location.y(), location.z(), filter);
-    }
-
+    @Nullable
     @SafeVarargs
     public static Entity getNearestEntityByClass(Entity entity, double radius, Class<? extends Entity> filter, Class<? extends Entity>... filters) {
         Collection<Entity> nearbyEntities = entity.getNearbyEntities(radius, radius, radius);
         return filterNearestEntityByClass(nearbyEntities, entity.getX(), entity.getY(), entity.getZ(), filter, filters);
     }
 
-    @SafeVarargs
-    public static Entity getNearestEntityByClass(World world, Location location, double radius, Class<? extends Entity> filter, Class<? extends Entity>... filters) {
+    public static void draw(Particle particle, Location start, Vector vector, double gap) {
+        Vector clonedVector = vector.clone();
+        double length = normalize(clonedVector);
+        World world = start.getWorld();
 
-        Collection<Entity> nearbyEntities = world.getNearbyEntities(location, radius, radius, radius);
-        return filterNearestEntityByClass(nearbyEntities, location.x(), location.y(), location.z(), filter, filters);
+        for (double i = 0; i < length; i += gap) {
+            double x = clonedVector.getX() * i;
+            double y = clonedVector.getY() * i;
+            double z = clonedVector.getZ() * i;
+            start.add(x, y, z);
+            world.spawnParticle(particle, start, 0, 0, 0, 0, 1);
+            start.subtract(x, y, z);
+        }
+
     }
 
-    /**
-     *
-     * Filter a collection of entities to get the nearest entity to a location
-     * that matches a specific entity class.
-     *
-     * @param entities Collection to search.
-     * @param filter Entity class to search.
-     * @return Nearest entity from the collection that matches the passed entity class, or null if none was found.
-     * @param <T> Entity type.
-     */
-    @Nullable
-    public static <T extends Entity> T filterNearestEntityByClass(Collection<Entity> entities, double x, double y, double z, @NotNull Class<T> filter) {
-        return (T) filterNearestEntityByClass(entities, x, y, z, filter, null);
+    public static double normalize(Vector vector) {
+        double length = vector.length();
+        vector.setX(vector.getX() / length);
+        vector.setY(vector.getY() / length);
+        vector.setZ(vector.getZ() / length);
+        return length;
     }
 
     /**
@@ -111,36 +106,19 @@ public class BossUtils {
             return null;
         }
         if (array == null) {
-            return (T[]) new Object[] {object};
+            T[] genericArray = (T[]) Array.newInstance(object.getClass(), 1);
+            genericArray[0] = object;
+            return genericArray;
         }
         if (object == null) {
             return array;
         }
 
-        int groupedArrayLength = array.length + 1;
-        Object[] groupedArray = new Object[groupedArrayLength];
-
+        T[] groupedArray = (T[]) Array.newInstance(array.getClass().getComponentType(), array.length + 1);
         System.arraycopy(array, 0, groupedArray, 0, array.length);
-        groupedArray[groupedArrayLength - 1] = object;
+        groupedArray[array.length] = object;
 
-        return (T[]) groupedArray;
-    }
-
-    /**
-     * Filter a collection of entities by their specific type.
-     * @param entities Entities to filter.
-     * @param filters Classes of entities to include.
-     * @return Filtered collection of entities.
-     */
-    @SafeVarargs
-    public static Collection<Entity> filterEntitiesByClass(@NotNull Collection<Entity> entities, @NotNull Class<? extends Entity>... filters) {
-        Collection<Entity> filteredEntities = new ArrayList<>();
-        for (Entity entity : entities) {
-            if (isEntityFromClass(entity, filters)) {
-                filteredEntities.add(entity);
-            }
-        }
-        return filteredEntities;
+        return groupedArray;
     }
 
     /**
@@ -156,63 +134,10 @@ public class BossUtils {
         return false;
     }
 
-
-    /**
-     * Filter a collection of entities to get the nearest to a location.
-     * @param entities Entities to filter.
-     * @param location Center location.
-     * @return Nearest entity from the passed collection to the center, or null if the passed collection was empty.
-     */
-    @Nullable
-    public static Entity filterNearestEntity(@NotNull Collection<Entity> entities, @NotNull Location location) {
-        double nearestDistanceSquare = Double.MAX_VALUE;
-        Entity nearestEntity = null;
-
-        if (entities.isEmpty()) {
-            return null;
-        }
-
-        for (Entity entity : entities) {
-            double distanceSquare = distanceSquare(entity, location);
-            if (distanceSquare >= nearestDistanceSquare) {
-                continue;
-            }
-            nearestDistanceSquare = distanceSquare;
-            nearestEntity = entity;
-        }
-        return nearestEntity;
-    }
-
     public static double distanceSquare(Entity entity1, Entity entity2) {
         return NumberConversions.square(entity1.getX() - entity2.getX()) +
                 NumberConversions.square(entity1.getY() - entity2.getY()) +
                 NumberConversions.square(entity1.getZ() - entity2.getZ());
-    }
-
-    public static double distanceSquare(Entity entity, Location location) {
-        return NumberConversions.square(entity.getX() - location.getX()) +
-                NumberConversions.square(entity.getY() - location.getY()) +
-                NumberConversions.square(entity.getZ() - location.getZ());
-    }
-
-    public static boolean isEntityInsideBlocks(Entity entity) {
-        BoundingBox entityBB = entity.getBoundingBox().expand(0.2);
-        World world = entity.getWorld();
-        return isEntityInsideBlocks(entityBB, world);
-    }
-
-    public static boolean isEntityInsideBlocks(BoundingBox entityBB, World entityWorld) {
-        for (int x = (int) entityBB.getMinX(); x <= entityBB.getMaxX(); x++) {
-            for (int y = (int) entityBB.getMinY(); y <= entityBB.getMaxY(); y++) {
-                for (int z = (int) entityBB.getMinZ(); z <= entityBB.getMaxZ(); z++) {
-                    Block block = entityWorld.getBlockAt(x, y, z);
-                    if (block.getType() != Material.AIR) {
-                        return true;
-                    }
-                }
-            }
-        }
-        return false;
     }
 
 }

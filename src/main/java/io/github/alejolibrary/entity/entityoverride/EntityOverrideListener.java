@@ -1,6 +1,7 @@
 package io.github.alejolibrary.entity.entityoverride;
 
 import com.destroystokyo.paper.event.entity.EntityAddToWorldEvent;
+import com.destroystokyo.paper.event.entity.EntityRemoveFromWorldEvent;
 import org.bukkit.entity.Entity;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -61,6 +62,15 @@ public class EntityOverrideListener implements Listener {
         EntityOverride override = EntityOverrideRegistry.getEntityOverride(entity);
         if (override != null) {
             override.onDeath(event);
+        }
+    }
+
+    @EventHandler
+    public void onEntityRemove(EntityRemoveFromWorldEvent event) {
+        Entity entity = event.getEntity();
+        EntityOverride override = EntityOverrideRegistry.getEntityOverride(entity);
+        if (override != null) {
+            override.onRemove(event);
         }
     }
 
