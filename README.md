@@ -23,3 +23,10 @@ dependencies {
     implementation("io.github.alejomc26:AlejoLibrary:1.0")
 }
 ````
+
+Shading
+````gradle
+shadowJar {
+    relocate 'io.github.alejolibrary', 'YOUR.PACKAGE.alejolibrary'
+}
+````
