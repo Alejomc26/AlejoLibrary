@@ -32,7 +32,9 @@ plugins {
 }
 ````
 ````gradle
-shadowJar {
-    relocate 'io.github.alejolibrary', 'YOUR.PACKAGE.alejolibrary'
+tasks {
+    named<ShadowJar>("shadowJar") {
+        relocate("io.github.alejolibrary","YOUR.PACKAGE.alejolibrary")
+    }
 }
 ````
